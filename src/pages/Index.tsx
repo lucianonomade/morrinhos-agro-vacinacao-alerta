@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import Header from '@/components/Header';
+import FuturisticSidebar from '@/components/FuturisticSidebar';
 import Dashboard from '@/components/Dashboard';
 import ClientForm from '@/components/ClientForm';
 import VaccineForm from '@/components/VaccineForm';
@@ -74,10 +74,16 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header currentPage={currentPage} onPageChange={setCurrentPage} />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {renderCurrentPage()}
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <FuturisticSidebar currentPage={currentPage} onPageChange={setCurrentPage} />
+      
+      {/* Main content with responsive margins */}
+      <main className="md:ml-20 transition-all duration-300 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-20 md:pt-8">
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 shadow-2xl">
+            {renderCurrentPage()}
+          </div>
+        </div>
       </main>
     </div>
   );
