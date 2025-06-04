@@ -29,24 +29,24 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
       
       let priority = 'low';
       let status = 'Válida';
-      let colorClass = 'border-green-200 bg-green-50';
+      let colorClass = 'border-cyan-500/20 bg-cyan-500/5';
       
       if (daysDiff < 0) {
         priority = 'critical';
         status = `Vencida há ${Math.abs(daysDiff)} dias`;
-        colorClass = 'border-red-200 bg-red-50';
+        colorClass = 'border-red-400/30 bg-red-500/10';
       } else if (daysDiff <= 3) {
         priority = 'high';
         status = `Vence em ${daysDiff} dias`;
-        colorClass = 'border-red-200 bg-red-50';
+        colorClass = 'border-red-400/30 bg-red-500/10';
       } else if (daysDiff <= 7) {
         priority = 'medium';
         status = `Vence em ${daysDiff} dias`;
-        colorClass = 'border-yellow-200 bg-yellow-50';
+        colorClass = 'border-yellow-400/30 bg-yellow-500/10';
       } else if (daysDiff <= 30) {
         priority = 'low';
         status = `Vence em ${daysDiff} dias`;
-        colorClass = 'border-blue-200 bg-blue-50';
+        colorClass = 'border-blue-400/30 bg-blue-500/10';
       }
       
       return {
@@ -85,13 +85,13 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
       case 'critical':
-        return <AlertTriangle className="h-5 w-5 text-red-600" />;
+        return <AlertTriangle className="h-5 w-5 text-red-400" />;
       case 'high':
-        return <Clock className="h-5 w-5 text-red-500" />;
+        return <Clock className="h-5 w-5 text-red-400" />;
       case 'medium':
-        return <Calendar className="h-5 w-5 text-yellow-500" />;
+        return <Calendar className="h-5 w-5 text-yellow-400" />;
       default:
-        return <Calendar className="h-5 w-5 text-blue-500" />;
+        return <Calendar className="h-5 w-5 text-blue-400" />;
     }
   };
 
@@ -102,38 +102,38 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-green-800 mb-6">Central de Alertas</h2>
+      <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-6">Central de Alertas</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card className="border-red-200">
+        <Card className="futuristic-card border-red-500/20">
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-8 w-8 text-red-600 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-red-600">{criticalAlerts.length}</div>
-            <div className="text-sm text-gray-600">Críticos</div>
+            <AlertTriangle className="h-8 w-8 text-red-400 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-red-400">{criticalAlerts.length}</div>
+            <div className="text-sm text-slate-400">Críticos</div>
           </CardContent>
         </Card>
         
-        <Card className="border-red-200">
+        <Card className="futuristic-card border-red-500/20">
           <CardContent className="p-4 text-center">
-            <Clock className="h-8 w-8 text-red-500 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-red-500">{highAlerts.length}</div>
-            <div className="text-sm text-gray-600">Alta Prioridade</div>
+            <Clock className="h-8 w-8 text-red-400 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-red-400">{highAlerts.length}</div>
+            <div className="text-sm text-slate-400">Alta Prioridade</div>
           </CardContent>
         </Card>
         
-        <Card className="border-yellow-200">
+        <Card className="futuristic-card border-yellow-500/20">
           <CardContent className="p-4 text-center">
-            <Calendar className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-yellow-500">{mediumAlerts.length}</div>
-            <div className="text-sm text-gray-600">Média Prioridade</div>
+            <Calendar className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-yellow-400">{mediumAlerts.length}</div>
+            <div className="text-sm text-slate-400">Média Prioridade</div>
           </CardContent>
         </Card>
         
-        <Card className="border-blue-200">
+        <Card className="futuristic-card border-blue-500/20">
           <CardContent className="p-4 text-center">
-            <Calendar className="h-8 w-8 text-blue-500 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-blue-500">{lowAlerts.length}</div>
-            <div className="text-sm text-gray-600">Baixa Prioridade</div>
+            <Calendar className="h-8 w-8 text-blue-400 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-blue-400">{lowAlerts.length}</div>
+            <div className="text-sm text-slate-400">Baixa Prioridade</div>
           </CardContent>
         </Card>
       </div>
@@ -141,21 +141,21 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
       {alerts.length > 0 ? (
         <div className="space-y-4">
           {alerts.map((alert) => (
-            <Card key={alert.id} className={`${alert.colorClass} border-l-4`}>
+            <Card key={alert.id} className={`${alert.colorClass} border-l-4 futuristic-card`}>
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
                   <div className="flex items-start space-x-3">
                     {getPriorityIcon(alert.priority)}
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">{alert.vaccineName}</h3>
-                      <p className="text-gray-700">{alert.clientName}</p>
-                      <p className="text-sm text-gray-600">{alert.clientWhatsapp}</p>
+                      <h3 className="font-semibold text-slate-200">{alert.vaccineName}</h3>
+                      <p className="text-slate-300">{alert.clientName}</p>
+                      <p className="text-sm text-slate-400">{alert.clientWhatsapp}</p>
                       <div className="mt-2 text-sm">
-                        <p><strong>Aplicação:</strong> {new Date(alert.vaccinationDate).toLocaleDateString('pt-BR')}</p>
-                        <p><strong>Vencimento:</strong> {new Date(alert.expiryDate).toLocaleDateString('pt-BR')}</p>
-                        <p className="font-medium text-gray-800">{alert.status}</p>
+                        <p className="text-slate-300"><strong>Aplicação:</strong> {new Date(alert.vaccinationDate).toLocaleDateString('pt-BR')}</p>
+                        <p className="text-slate-300"><strong>Vencimento:</strong> {new Date(alert.expiryDate).toLocaleDateString('pt-BR')}</p>
+                        <p className="font-medium text-slate-200">{alert.status}</p>
                         {alert.notes && (
-                          <p className="mt-1 text-gray-600"><strong>Obs:</strong> {alert.notes}</p>
+                          <p className="mt-1 text-slate-400"><strong>Obs:</strong> {alert.notes}</p>
                         )}
                       </div>
                     </div>
@@ -163,7 +163,7 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
                   
                   <Button
                     onClick={() => handleWhatsAppContact(alert.clientWhatsapp, alert.clientName, alert.vaccineName, alert.status)}
-                    className="bg-green-600 hover:bg-green-700 flex items-center space-x-2"
+                    className="futuristic-button flex items-center space-x-2"
                   >
                     <Phone className="h-4 w-4" />
                     <span>WhatsApp</span>
@@ -174,11 +174,11 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
           ))}
         </div>
       ) : (
-        <Card>
+        <Card className="futuristic-card">
           <CardContent className="p-8 text-center">
-            <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">Nenhum alerta no momento</p>
-            <p className="text-gray-400 text-sm">Todas as vacinas estão em dia!</p>
+            <Calendar className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+            <p className="text-slate-400 text-lg">Nenhum alerta no momento</p>
+            <p className="text-slate-500 text-sm">Todas as vacinas estão em dia!</p>
           </CardContent>
         </Card>
       )}

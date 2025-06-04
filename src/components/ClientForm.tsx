@@ -62,11 +62,11 @@ const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-green-800 mb-6">Clientes</h2>
+      <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-6">Clientes</h2>
       
-      <Card>
+      <Card className="futuristic-card">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-cyan-300">
             <Plus className="h-5 w-5" />
             <span>Cadastrar Novo Cliente</span>
           </CardTitle>
@@ -75,31 +75,31 @@ const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Nome Completo</Label>
+                <Label htmlFor="name" className="text-slate-300">Nome Completo</Label>
                 <Input
                   id="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Digite o nome do cliente"
-                  className="border-green-200 focus:border-green-500"
+                  className="futuristic-input"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="whatsapp">WhatsApp</Label>
+                <Label htmlFor="whatsapp" className="text-slate-300">WhatsApp</Label>
                 <Input
                   id="whatsapp"
                   type="tel"
                   value={whatsapp}
                   onChange={(e) => setWhatsapp(formatWhatsApp(e.target.value))}
                   placeholder="(00) 00000-0000"
-                  className="border-green-200 focus:border-green-500"
+                  className="futuristic-input"
                 />
               </div>
             </div>
             
-            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
+            <Button type="submit" className="w-full futuristic-button">
               <Plus className="h-4 w-4 mr-2" />
               Cadastrar Cliente
             </Button>
@@ -107,9 +107,9 @@ const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="futuristic-card">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
+          <CardTitle className="flex items-center space-x-2 text-cyan-300">
             <User className="h-5 w-5" />
             <span>Clientes Cadastrados ({clients.length})</span>
           </CardTitle>
@@ -118,13 +118,13 @@ const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
           {clients.length > 0 ? (
             <div className="space-y-3">
               {clients.map((client) => (
-                <div key={client.id} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border">
+                <div key={client.id} className="flex justify-between items-center p-4 bg-slate-800/50 rounded-lg border border-slate-600/50">
                   <div>
-                    <h3 className="font-medium text-gray-900">{client.name}</h3>
-                    <p className="text-sm text-gray-600">{client.whatsapp}</p>
+                    <h3 className="font-medium text-slate-200">{client.name}</h3>
+                    <p className="text-sm text-slate-400">{client.whatsapp}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-slate-500">
                       Cadastrado em {new Date(client.createdAt).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
@@ -132,7 +132,7 @@ const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">Nenhum cliente cadastrado ainda</p>
+            <p className="text-slate-400 text-center py-8">Nenhum cliente cadastrado ainda</p>
           )}
         </CardContent>
       </Card>
