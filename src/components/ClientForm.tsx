@@ -11,19 +11,20 @@ interface Client {
   id: string;
   name: string;
   whatsapp: string;
-  createdAt: string;
+  created_at: string;
 }
 
 interface ClientFormProps {
   clients: Client[];
-  onAddClient: (client: Client) => void;
+  onAddClient: (client: { name: string; whatsapp: string }) => Promise<void>;
 }
 
 const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
   const [name, setName] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!name.trim() || !whatsapp.trim()) {
@@ -35,21 +36,20 @@ const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
       return;
     }
 
-    const newClient: Client = {
-      id: Date.now().toString(),
-      name: name.trim(),
-      whatsapp: whatsapp.trim(),
-      createdAt: new Date().toISOString(),
-    };
-
-    onAddClient(newClient);
-    setName('');
-    setWhatsapp('');
-    
-    toast({
-      title: "Sucesso!",
-      description: "Cliente cadastrado com sucesso",
-    });
+    setIsLoading(true);
+    try {
+      await onAddClient({
+        name: name.trim(),
+        whatsapp: whatsapp.trim(),
+      });
+      
+      setName('');
+      setWhatsapp('');
+    } catch (error) {
+      // Error handling is done in the hook
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const formatWhatsApp = (value: string) => {
@@ -83,6 +83,7 @@ const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Digite o nome do cliente"
                   className="futuristic-input"
+                  disabled={isLoading}
                 />
               </div>
               
@@ -95,13 +96,14 @@ const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
                   onChange={(e) => setWhatsapp(formatWhatsApp(e.target.value))}
                   placeholder="(00) 00000-0000"
                   className="futuristic-input"
+                  disabled={isLoading}
                 />
               </div>
             </div>
             
-            <Button type="submit" className="w-full futuristic-button">
+            <Button type="submit" className="w-full futuristic-button" disabled={isLoading}>
               <Plus className="h-4 w-4 mr-2" />
-              Cadastrar Cliente
+              {isLoading ? 'Cadastrando...' : 'Cadastrar Cliente'}
             </Button>
           </form>
         </CardContent>
@@ -125,7 +127,7 @@ const ClientForm = ({ clients, onAddClient }: ClientFormProps) => {
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-slate-500">
-                      Cadastrado em {new Date(client.createdAt).toLocaleDateString('pt-BR')}
+                      Cadastrado em {new Date(client.created_at).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                 </div>

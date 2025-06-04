@@ -9,7 +9,107 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      clients: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          updated_at: string | null
+          user_id: string
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          updated_at?: string | null
+          user_id: string
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          updated_at?: string | null
+          user_id?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      vaccines: {
+        Row: {
+          client_id: string
+          client_name: string
+          client_whatsapp: string
+          created_at: string | null
+          expiry_date: string
+          id: string
+          notes: string | null
+          updated_at: string | null
+          user_id: string
+          vaccination_date: string
+          vaccine_name: string
+        }
+        Insert: {
+          client_id: string
+          client_name: string
+          client_whatsapp: string
+          created_at?: string | null
+          expiry_date: string
+          id?: string
+          notes?: string | null
+          updated_at?: string | null
+          user_id: string
+          vaccination_date: string
+          vaccine_name: string
+        }
+        Update: {
+          client_id?: string
+          client_name?: string
+          client_whatsapp?: string
+          created_at?: string | null
+          expiry_date?: string
+          id?: string
+          notes?: string | null
+          updated_at?: string | null
+          user_id?: string
+          vaccination_date?: string
+          vaccine_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaccines_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
