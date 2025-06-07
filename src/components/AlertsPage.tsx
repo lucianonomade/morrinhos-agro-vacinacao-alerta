@@ -6,12 +6,12 @@ import { toast } from '@/hooks/use-toast';
 
 interface Vaccine {
   id: string;
-  clientId: string;
-  clientName: string;
-  clientWhatsapp: string;
-  vaccineName: string;
-  vaccinationDate: string;
-  expiryDate: string;
+  client_id: string;
+  client_name: string;
+  client_whatsapp: string;
+  vaccine_name: string;
+  vaccination_date: string;
+  expiry_date: string;
   notes?: string;
 }
 
@@ -24,7 +24,7 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
   
   const getAlerts = () => {
     const alerts = vaccines.map(vaccine => {
-      const expiryDate = new Date(vaccine.expiryDate);
+      const expiryDate = new Date(vaccine.expiry_date);
       const daysDiff = Math.ceil((expiryDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
       
       let priority = 'low';
@@ -147,12 +147,12 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
                   <div className="flex items-start space-x-3">
                     {getPriorityIcon(alert.priority)}
                     <div className="flex-1">
-                      <h3 className="font-semibold text-slate-200">{alert.vaccineName}</h3>
-                      <p className="text-slate-300">{alert.clientName}</p>
-                      <p className="text-sm text-slate-400">{alert.clientWhatsapp}</p>
+                      <h3 className="font-semibold text-slate-200">{alert.vaccine_name}</h3>
+                      <p className="text-slate-300">{alert.client_name}</p>
+                      <p className="text-sm text-slate-400">{alert.client_whatsapp}</p>
                       <div className="mt-2 text-sm">
-                        <p className="text-slate-300"><strong>Aplicação:</strong> {new Date(alert.vaccinationDate).toLocaleDateString('pt-BR')}</p>
-                        <p className="text-slate-300"><strong>Vencimento:</strong> {new Date(alert.expiryDate).toLocaleDateString('pt-BR')}</p>
+                        <p className="text-slate-300"><strong>Aplicação:</strong> {new Date(alert.vaccination_date).toLocaleDateString('pt-BR')}</p>
+                        <p className="text-slate-300"><strong>Vencimento:</strong> {new Date(alert.expiry_date).toLocaleDateString('pt-BR')}</p>
                         <p className="font-medium text-slate-200">{alert.status}</p>
                         {alert.notes && (
                           <p className="mt-1 text-slate-400"><strong>Obs:</strong> {alert.notes}</p>
@@ -162,7 +162,7 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
                   </div>
                   
                   <Button
-                    onClick={() => handleWhatsAppContact(alert.clientWhatsapp, alert.clientName, alert.vaccineName, alert.status)}
+                    onClick={() => handleWhatsAppContact(alert.client_whatsapp, alert.client_name, alert.vaccine_name, alert.status)}
                     className="futuristic-button flex items-center space-x-2"
                   >
                     <Phone className="h-4 w-4" />
