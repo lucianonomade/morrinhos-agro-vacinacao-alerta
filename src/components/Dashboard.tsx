@@ -2,21 +2,39 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Calendar, AlertTriangle, CheckCircle } from 'lucide-react';
 
+interface Client {
+  id: string;
+  name: string;
+  whatsapp: string;
+  created_at: string;
+}
+
+interface Vaccine {
+  id: string;
+  client_id: string;
+  client_name: string;
+  client_whatsapp: string;
+  vaccine_name: string;
+  vaccination_date: string;
+  expiry_date: string;
+  notes?: string;
+}
+
 interface DashboardProps {
-  clients: any[];
-  vaccines: any[];
+  clients: Client[];
+  vaccines: Vaccine[];
 }
 
 const Dashboard = ({ clients, vaccines }: DashboardProps) => {
   const today = new Date();
   const upcomingVaccines = vaccines.filter(vaccine => {
-    const expiryDate = new Date(vaccine.expiryDate);
+    const expiryDate = new Date(vaccine.expiry_date);
     const daysDiff = (expiryDate.getTime() - today.getTime()) / (1000 * 3600 * 24);
     return daysDiff <= 7 && daysDiff >= 0;
   });
 
   const expiredVaccines = vaccines.filter(vaccine => {
-    const expiryDate = new Date(vaccine.expiryDate);
+    const expiryDate = new Date(vaccine.expiry_date);
     return expiryDate < today;
   });
 
@@ -82,15 +100,15 @@ const Dashboard = ({ clients, vaccines }: DashboardProps) => {
           <CardContent>
             {upcomingVaccines.length > 0 ? (
               <div className="space-y-3">
-                {upcomingVaccines.slice(0, 5).map((vaccine, index) => (
-                  <div key={index} className="flex justify-between items-center p-3 bg-yellow-500/10 rounded-lg border border-yellow-400/30">
+                {upcomingVaccines.slice(0, 5).map((vaccine) => (
+                  <div key={vaccine.id} className="flex justify-between items-center p-3 bg-yellow-500/10 rounded-lg border border-yellow-400/30">
                     <div>
-                      <p className="font-medium text-slate-200">{vaccine.clientName}</p>
-                      <p className="text-sm text-slate-400">{vaccine.vaccineName}</p>
+                      <p className="font-medium text-slate-200">{vaccine.client_name}</p>
+                      <p className="text-sm text-slate-400">{vaccine.vaccine_name}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-medium text-yellow-300">
-                        {new Date(vaccine.expiryDate).toLocaleDateString('pt-BR')}
+                        {new Date(vaccine.expiry_date).toLocaleDateString('pt-BR')}
                       </p>
                     </div>
                   </div>
@@ -109,15 +127,15 @@ const Dashboard = ({ clients, vaccines }: DashboardProps) => {
           <CardContent>
             {expiredVaccines.length > 0 ? (
               <div className="space-y-3">
-                {expiredVaccines.slice(0, 5).map((vaccine, index) => (
-                  <div key={index} className="flex justify-between items-center p-3 bg-red-500/10 rounded-lg border border-red-400/30">
+                {expiredVaccines.slice(0, 5).map((vaccine) => (
+                  <div key={vaccine.id} className="flex justify-between items-center p-3 bg-red-500/10 rounded-lg border border-red-400/30">
                     <div>
-                      <p className="font-medium text-slate-200">{vaccine.clientName}</p>
-                      <p className="text-sm text-slate-400">{vaccine.vaccineName}</p>
+                      <p className="font-medium text-slate-200">{vaccine.client_name}</p>
+                      <p className="text-sm text-slate-400">{vaccine.vaccine_name}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-medium text-red-300">
-                        {new Date(vaccine.expiryDate).toLocaleDateString('pt-BR')}
+                        {new Date(vaccine.expiry_date).toLocaleDateString('pt-BR')}
                       </p>
                     </div>
                   </div>
