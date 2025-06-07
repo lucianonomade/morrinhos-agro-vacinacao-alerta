@@ -28,7 +28,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-            SisVac
+            Vacina
           </h1>
           <span className="text-slate-400 text-sm">
             Sistema de Controle de Vacinação
