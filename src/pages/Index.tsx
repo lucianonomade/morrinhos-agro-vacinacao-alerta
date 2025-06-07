@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import FuturisticSidebar from '@/components/FuturisticSidebar';
+import MobileNavigation from '@/components/MobileNavigation';
 import Header from '@/components/Header';
 import Dashboard from '@/components/Dashboard';
 import ClientForm from '@/components/ClientForm';
@@ -52,14 +53,17 @@ const Index = () => {
       <FuturisticSidebar currentPage={currentPage} onPageChange={setCurrentPage} />
       <Header />
       
-      {/* Main content with responsive margins */}
-      <main className="md:ml-20 transition-all duration-300 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-4">
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 shadow-2xl">
+      {/* Main content with responsive margins and padding */}
+      <main className="md:ml-20 transition-all duration-300 min-h-screen pb-20 md:pb-0">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 md:py-8 pt-2 md:pt-4">
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl">
             {renderCurrentPage()}
           </div>
         </div>
       </main>
+
+      {/* Mobile bottom navigation */}
+      <MobileNavigation currentPage={currentPage} onPageChange={setCurrentPage} />
     </div>
   );
 };

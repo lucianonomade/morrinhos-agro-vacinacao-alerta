@@ -92,6 +92,16 @@
 
   body {
     @apply bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-foreground min-h-screen;
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+  }
+
+  /* Improve touch targets on mobile */
+  @media (max-width: 768px) {
+    button, a, input, select, textarea {
+      min-height: 44px;
+      min-width: 44px;
+    }
   }
 }
 
@@ -123,5 +133,14 @@
 
   .futuristic-input {
     @apply bg-slate-900/50 border border-slate-600/50 text-slate-200 placeholder:text-slate-400 focus:border-cyan-400/50 focus:ring-cyan-400/20;
+  }
+
+  /* Mobile-specific utilities */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  .mobile-safe-area {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
