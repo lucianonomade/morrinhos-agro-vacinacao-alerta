@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, Phone, Calendar, Clock } from 'lucide-react';
+import { AlertTriangle, Phone, Calendar, Clock, Send } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface Vaccine {
@@ -80,6 +80,47 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
       title: "WhatsApp aberto",
       description: `Contato iniciado com ${clientName}`,
     });
+  };
+
+  const handleWebhookNotification = async (alert: any) => {
+    const webhookUrl = 'https://webhook.ls.app.br/webhook/0310fcd4-479a-44de-82df-d148bb79618d';
+    
+    const payload = {
+      message: `Olá, aqui é da Agropecuária Morrinhos. A vacina está prestes a vencer!`,
+      client_name: alert.client_name,
+      client_whatsapp: alert.client_whatsapp,
+      vaccine_name: alert.vaccine_name,
+      vaccination_date: alert.vaccination_date,
+      expiry_date: alert.expiry_date,
+      status: alert.status,
+      days_until_expiry: alert.daysDiff,
+      priority: alert.priority,
+      notes: alert.notes || '',
+      timestamp: new Date().toISOString()
+    };
+
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'no-cors',
+        body: JSON.stringify(payload),
+      });
+
+      toast({
+        title: "Notificação enviada!",
+        description: `Alerta enviado para o webhook da Morrinhos Agropecuária sobre ${alert.vaccine_name}`,
+      });
+    } catch (error) {
+      console.error('Erro ao enviar webhook:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao enviar notificação para o webhook",
+        variant: "destructive",
+      });
+    }
   };
 
   const getPriorityIcon = (priority: string) => {
@@ -161,13 +202,23 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
                     </div>
                   </div>
                   
-                  <Button
-                    onClick={() => handleWhatsAppContact(alert.client_whatsapp, alert.client_name, alert.vaccine_name, alert.status)}
-                    className="futuristic-button flex items-center space-x-2"
-                  >
-                    <Phone className="h-4 w-4" />
-                    <span>WhatsApp</span>
-                  </Button>
+                  <div className="flex flex-col space-y-2">
+                    <Button
+                      onClick={() => handleWhatsAppContact(alert.client_whatsapp, alert.client_name, alert.vaccine_name, alert.status)}
+                      className="futuristic-button flex items-center space-x-2"
+                    >
+                      <Phone className="h-4 w-4" />
+                      <span>WhatsApp</span>
+                    </Button>
+                    
+                    <Button
+                      onClick={() => handleWebhookNotification(alert)}
+                      className="futuristic-button bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex items-center space-x-2"
+                    >
+                      <Send className="h-4 w-4" />
+                      <span>Notificar</span>
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
