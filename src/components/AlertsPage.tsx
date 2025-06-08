@@ -83,7 +83,7 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
   };
 
   const handleWebhookNotification = async (alert: any) => {
-    const webhookUrl = 'https://webhook.ls.app.br/webhook/0310fcd4-479a-44de-82df-d148bb79618d';
+    const webhookUrl = 'https://webhook.ls.app.br/webhook/793419b2-4251-47c3-985f-056019f63bde';
     
     const payload = {
       message: `Olá, aqui é da Agropecuária Morrinhos. A vacina está prestes a vencer!`,
