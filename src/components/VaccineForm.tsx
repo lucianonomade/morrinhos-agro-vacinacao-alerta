@@ -44,7 +44,7 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine }: VaccineFormProps) => {
   const [notes, setNotes] = useState('');
 
   const sendWebhookNotification = async (vaccineData: Omit<Vaccine, 'id'>) => {
-    const webhookUrl = 'https://webhook.ls.app.br/webhook/793419b2-4251-47c3-985f-056019f63bde';
+    const webhookUrl = 'https://webhook.ls.app.br/webhook/0310fcd4-479a-44de-82df-d148bb79618d';
     
     const payload = {
       message: "Nova vacina cadastrada na Agropecuária Morrinhos",
