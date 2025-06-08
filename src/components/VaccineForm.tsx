@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -44,7 +43,38 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine }: VaccineFormProps) => {
   const [expiryDate, setExpiryDate] = useState<Date>();
   const [notes, setNotes] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const sendWebhookNotification = async (vaccineData: Omit<Vaccine, 'id'>) => {
+    const webhookUrl = 'https://webhook.ls.app.br/webhook/793419b2-4251-47c3-985f-056019f63bde';
+    
+    const payload = {
+      message: "Nova vacina cadastrada na Agropecuária Morrinhos",
+      client_name: vaccineData.client_name,
+      client_whatsapp: vaccineData.client_whatsapp,
+      vaccine_name: vaccineData.vaccine_name,
+      vaccination_date: vaccineData.vaccination_date,
+      expiry_date: vaccineData.expiry_date,
+      notes: vaccineData.notes || '',
+      timestamp: new Date().toISOString(),
+      action: "vaccine_registered"
+    };
+
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'no-cors',
+        body: JSON.stringify(payload),
+      });
+
+      console.log('Webhook enviado com sucesso para nova vacina');
+    } catch (error) {
+      console.error('Erro ao enviar webhook:', error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!selectedClientId || !vaccineName.trim() || !vaccinationDate || !expiryDate) {
@@ -75,6 +105,9 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine }: VaccineFormProps) => {
       expiry_date: expiryDate.toISOString().split('T')[0],
       notes: notes.trim(),
     };
+
+    // Enviar webhook antes de adicionar a vacina
+    await sendWebhookNotification(newVaccine);
 
     onAddVaccine(newVaccine);
     setSelectedClientId('');
