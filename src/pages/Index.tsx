@@ -27,8 +27,8 @@ const Index = () => {
       return (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <Loader2 className="h-8 w-8 animate-spin text-amber-400 mx-auto mb-4" />
-            <p className="text-green-200">Carregando dados...</p>
+            <Loader2 className="h-8 w-8 animate-spin text-green-500 mx-auto mb-4" />
+            <p className="text-gray-600">Carregando dados...</p>
           </div>
         </div>
       );
@@ -49,7 +49,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-950 via-green-900 to-amber-950">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50 to-blue-50">
       <RuralSidebar currentPage={currentPage} onPageChange={setCurrentPage} />
       <Header />
       

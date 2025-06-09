@@ -24,7 +24,7 @@ const MobileNavigation = ({ currentPage, onPageChange }: MobileNavigationProps) 
   ];
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-green-800/95 backdrop-blur-sm border-t border-green-700/50 px-2 py-1 wood-texture">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-green-200 px-2 py-1 subtle-texture shadow-lg">
       <div className="flex justify-around items-center max-w-lg mx-auto">
         {menuItems.map((item) => {
           const IconComponent = item.icon;
@@ -37,8 +37,8 @@ const MobileNavigation = ({ currentPage, onPageChange }: MobileNavigationProps) 
               onClick={() => onPageChange(item.id)}
               className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-all duration-200 min-w-0 ${
                 isActive
-                  ? 'bg-amber-700 text-amber-50'
-                  : 'text-green-200 hover:text-amber-100'
+                  ? 'bg-green-600 text-white'
+                  : 'text-green-600 hover:text-green-700 hover:bg-green-50'
               }`}
             >
               <IconComponent className="h-5 w-5 mb-1" />

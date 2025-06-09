@@ -50,7 +50,7 @@ const RuralSidebar = ({ currentPage, onPageChange }: SidebarProps) => {
       {/* Mobile Trigger Button */}
       <Button
         onClick={() => setIsMobileOpen(true)}
-        className="md:hidden fixed top-4 left-4 z-50 bg-amber-700 border border-amber-600 text-amber-50 hover:bg-amber-600"
+        className="md:hidden fixed top-4 left-4 z-50 bg-green-600 border border-green-500 text-white hover:bg-green-700"
         size="icon"
       >
         <Menu className="h-5 w-5" />
@@ -80,9 +80,9 @@ const RuralSidebar = ({ currentPage, onPageChange }: SidebarProps) => {
             variants={mobileSidebarVariants}
             className="md:hidden fixed left-0 top-0 h-full w-80 z-50"
           >
-            <div className="h-full bg-gradient-to-b from-green-800 to-green-900 border-r border-green-700 shadow-xl wood-texture">
+            <div className="h-full bg-white border-r border-green-200 shadow-xl subtle-texture">
               {/* Mobile Header */}
-              <div className="p-6 border-b border-green-700/50">
+              <div className="p-6 border-b border-green-200">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <img 
@@ -91,17 +91,17 @@ const RuralSidebar = ({ currentPage, onPageChange }: SidebarProps) => {
                       className="h-10 w-10 object-contain"
                     />
                     <div>
-                      <h1 className="text-xl font-bold text-amber-100">
+                      <h1 className="text-xl font-bold text-green-700">
                         Morrinhos
                       </h1>
-                      <p className="text-sm text-green-200">Agropecuária</p>
+                      <p className="text-sm text-green-600">Agropecuária</p>
                     </div>
                   </div>
                   <Button
                     onClick={() => setIsMobileOpen(false)}
                     variant="ghost"
                     size="icon"
-                    className="text-amber-200 hover:text-amber-100 hover:bg-green-700/50"
+                    className="text-green-600 hover:text-green-700 hover:bg-green-50"
                   >
                     <X className="h-5 w-5" />
                   </Button>
@@ -129,8 +129,8 @@ const RuralSidebar = ({ currentPage, onPageChange }: SidebarProps) => {
                       }}
                       className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                         isActive
-                          ? 'bg-amber-700 text-amber-50 shadow-md'
-                          : 'text-green-100 hover:bg-green-700/50 hover:text-amber-100'
+                          ? 'bg-green-600 text-white shadow-md'
+                          : 'text-green-700 hover:bg-green-50 hover:text-green-800'
                       }`}
                     >
                       <IconComponent className="h-5 w-5" />
@@ -151,10 +151,10 @@ const RuralSidebar = ({ currentPage, onPageChange }: SidebarProps) => {
         variants={sidebarVariants}
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
-        className="hidden md:block fixed left-0 top-0 h-full z-30 bg-gradient-to-b from-green-800 to-green-900 border-r border-green-700 shadow-xl wood-texture"
+        className="hidden md:block fixed left-0 top-0 h-full z-30 bg-white border-r border-green-200 shadow-xl subtle-texture"
       >
         {/* Header */}
-        <div className="p-6 border-b border-green-700/50">
+        <div className="p-6 border-b border-green-200">
           <div className="flex items-center space-x-3">
             <img 
               src="/lovable-uploads/1a35f86c-f516-4b6c-9ee1-b3e42e26f758.png" 
@@ -169,10 +169,10 @@ const RuralSidebar = ({ currentPage, onPageChange }: SidebarProps) => {
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h1 className="text-xl font-bold text-amber-100">
+                  <h1 className="text-xl font-bold text-green-700">
                     Morrinhos
                   </h1>
-                  <p className="text-sm text-green-200">Agropecuária</p>
+                  <p className="text-sm text-green-600">Agropecuária</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -197,8 +197,8 @@ const RuralSidebar = ({ currentPage, onPageChange }: SidebarProps) => {
                 onClick={() => onPageChange(item.id)}
                 className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActive
-                    ? 'bg-amber-700 text-amber-50 shadow-md'
-                    : 'text-green-100 hover:bg-green-700/50 hover:text-amber-100'
+                    ? 'bg-green-600 text-white shadow-md'
+                    : 'text-green-700 hover:bg-green-50 hover:text-green-800'
                 }`}
               >
                 <IconComponent className="h-5 w-5" />
@@ -225,7 +225,7 @@ const RuralSidebar = ({ currentPage, onPageChange }: SidebarProps) => {
                       exit={{ opacity: 0, scale: 0 }}
                       className="ml-auto"
                     >
-                      <ChevronRight className="h-4 w-4 text-green-300" />
+                      <ChevronRight className="h-4 w-4 text-green-400" />
                     </motion.div>
                   )}
                 </AnimatePresence>
