@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import FuturisticSidebar from '@/components/FuturisticSidebar';
+import RuralSidebar from '@/components/RuralSidebar';
 import MobileNavigation from '@/components/MobileNavigation';
 import Header from '@/components/Header';
 import Dashboard from '@/components/Dashboard';
@@ -27,8 +27,8 @@ const Index = () => {
       return (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <Loader2 className="h-8 w-8 animate-spin text-cyan-400 mx-auto mb-4" />
-            <p className="text-slate-400">Carregando dados...</p>
+            <Loader2 className="h-8 w-8 animate-spin text-amber-400 mx-auto mb-4" />
+            <p className="text-green-200">Carregando dados...</p>
           </div>
         </div>
       );
@@ -49,14 +49,14 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      <FuturisticSidebar currentPage={currentPage} onPageChange={setCurrentPage} />
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-green-900 to-amber-950">
+      <RuralSidebar currentPage={currentPage} onPageChange={setCurrentPage} />
       <Header />
       
       {/* Main content with responsive margins and padding */}
       <main className="md:ml-20 transition-all duration-300 min-h-screen pb-20 md:pb-0">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 md:py-8 pt-2 md:pt-4">
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl">
+          <div className="agro-card p-3 sm:p-4 md:p-6 shadow-xl">
             {renderCurrentPage()}
           </div>
         </div>
