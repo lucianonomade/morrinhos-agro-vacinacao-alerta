@@ -105,7 +105,7 @@
 
 @layer utilities {
   .agro-card {
-    @apply bg-white/80 backdrop-blur-sm border border-green-200 rounded-lg shadow-lg;
+    @apply bg-white/90 backdrop-blur-sm border border-green-200 rounded-lg shadow-lg;
   }
 
   .agro-button {
@@ -124,10 +124,37 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 
+  .safe-area-pb {
+    padding-bottom: max(env(safe-area-inset-bottom), 8px);
+  }
+
   .subtle-texture {
     background-image: 
       radial-gradient(circle at 1px 1px, rgba(34, 197, 94, 0.05) 1px, transparent 0);
     background-size: 20px 20px;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .agro-card {
+      @apply bg-white/95 shadow-md;
+    }
+    
+    .text-mobile-sm {
+      @apply text-sm;
+    }
+    
+    .text-mobile-xs {
+      @apply text-xs;
+    }
+    
+    .p-mobile {
+      @apply p-3;
+    }
+    
+    .space-y-mobile {
+      @apply space-y-3;
+    }
   }
 }
 

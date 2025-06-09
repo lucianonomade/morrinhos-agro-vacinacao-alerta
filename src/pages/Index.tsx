@@ -29,10 +29,10 @@ const Index = () => {
   const renderCurrentPage = () => {
     if (loading) {
       return (
-        <div className="flex items-center justify-center py-12">
+        <div className="flex items-center justify-center py-8 md:py-12">
           <div className="text-center">
-            <Loader2 className="h-8 w-8 animate-spin text-green-500 mx-auto mb-4" />
-            <p className="text-gray-600">Carregando dados...</p>
+            <Loader2 className="h-6 w-6 md:h-8 md:w-8 animate-spin text-green-500 mx-auto mb-3 md:mb-4" />
+            <p className="text-sm md:text-base text-gray-600">Carregando dados...</p>
           </div>
         </div>
       );
@@ -57,16 +57,16 @@ const Index = () => {
       <RuralSidebar currentPage={currentPage} onPageChange={setCurrentPage} />
       <Header />
       
-      {/* Main content with responsive margins and padding */}
-      <main className="md:ml-20 transition-all duration-300 min-h-screen pb-20 md:pb-0">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 md:py-8 pt-2 md:pt-4">
-          <div className="bg-white rounded-lg shadow-lg border-gray-200 p-3 sm:p-4 md:p-6">
+      {/* Main content with improved mobile responsiveness */}
+      <main className="md:ml-20 transition-all duration-300 min-h-screen pb-20 md:pb-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2 md:py-6 pt-1 md:pt-3">
+          <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-3 sm:p-4 md:p-6">
             {renderCurrentPage()}
           </div>
         </div>
       </main>
 
-      {/* Mobile bottom navigation */}
+      {/* Mobile bottom navigation with safe area */}
       <MobileNavigation currentPage={currentPage} onPageChange={setCurrentPage} />
     </div>
   );
