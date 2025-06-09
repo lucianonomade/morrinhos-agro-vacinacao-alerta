@@ -1,7 +1,8 @@
 
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, Phone, Calendar, Clock, Send } from 'lucide-react';
+import { AlertTriangle, Phone, Calendar, Clock, Send, Trash2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface Vaccine {
@@ -17,9 +18,11 @@ interface Vaccine {
 
 interface AlertsPageProps {
   vaccines: Vaccine[];
+  onDeleteVaccine: (vaccineId: string) => void;
 }
 
-const AlertsPage = ({ vaccines }: AlertsPageProps) => {
+const AlertsPage = ({ vaccines, onDeleteVaccine }: AlertsPageProps) => {
+  const [deletingVaccine, setDeletingVaccine] = useState<string | null>(null);
   const today = new Date();
   
   const getAlerts = () => {
@@ -29,24 +32,24 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
       
       let priority = 'low';
       let status = 'Válida';
-      let colorClass = 'border-cyan-500/20 bg-cyan-500/5';
+      let colorClass = 'border-blue-300 bg-blue-50';
       
       if (daysDiff < 0) {
         priority = 'critical';
         status = `Vencida há ${Math.abs(daysDiff)} dias`;
-        colorClass = 'border-red-400/30 bg-red-500/10';
+        colorClass = 'border-red-300 bg-red-50';
       } else if (daysDiff <= 3) {
         priority = 'high';
         status = `Vence em ${daysDiff} dias`;
-        colorClass = 'border-red-400/30 bg-red-500/10';
+        colorClass = 'border-red-300 bg-red-50';
       } else if (daysDiff <= 7) {
         priority = 'medium';
         status = `Vence em ${daysDiff} dias`;
-        colorClass = 'border-yellow-400/30 bg-yellow-500/10';
+        colorClass = 'border-amber-300 bg-amber-50';
       } else if (daysDiff <= 30) {
         priority = 'low';
         status = `Vence em ${daysDiff} dias`;
-        colorClass = 'border-blue-400/30 bg-blue-500/10';
+        colorClass = 'border-blue-300 bg-blue-50';
       }
       
       return {
@@ -123,16 +126,27 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
     }
   };
 
+  const handleDeleteVaccine = async (vaccineId: string, vaccineName: string) => {
+    if (window.confirm(`Tem certeza que deseja excluir a vacina "${vaccineName}"? Esta ação não pode ser desfeita.`)) {
+      setDeletingVaccine(vaccineId);
+      try {
+        await onDeleteVaccine(vaccineId);
+      } finally {
+        setDeletingVaccine(null);
+      }
+    }
+  };
+
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
       case 'critical':
-        return <AlertTriangle className="h-5 w-5 text-red-400" />;
+        return <AlertTriangle className="h-5 w-5 text-red-600" />;
       case 'high':
-        return <Clock className="h-5 w-5 text-red-400" />;
+        return <Clock className="h-5 w-5 text-red-600" />;
       case 'medium':
-        return <Calendar className="h-5 w-5 text-yellow-400" />;
+        return <Calendar className="h-5 w-5 text-amber-600" />;
       default:
-        return <Calendar className="h-5 w-5 text-blue-400" />;
+        return <Calendar className="h-5 w-5 text-blue-600" />;
     }
   };
 
@@ -143,38 +157,38 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-6">Central de Alertas</h2>
+      <h2 className="text-3xl font-bold text-green-700 mb-6">Central de Alertas</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card className="futuristic-card border-red-500/20">
+        <Card className="border-red-200 bg-white">
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-8 w-8 text-red-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-red-400">{criticalAlerts.length}</div>
-            <div className="text-sm text-slate-400">Críticos</div>
+            <AlertTriangle className="h-8 w-8 text-red-600 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-red-600">{criticalAlerts.length}</div>
+            <div className="text-sm text-gray-600">Críticos</div>
           </CardContent>
         </Card>
         
-        <Card className="futuristic-card border-red-500/20">
+        <Card className="border-red-200 bg-white">
           <CardContent className="p-4 text-center">
-            <Clock className="h-8 w-8 text-red-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-red-400">{highAlerts.length}</div>
-            <div className="text-sm text-slate-400">Alta Prioridade</div>
+            <Clock className="h-8 w-8 text-red-600 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-red-600">{highAlerts.length}</div>
+            <div className="text-sm text-gray-600">Alta Prioridade</div>
           </CardContent>
         </Card>
         
-        <Card className="futuristic-card border-yellow-500/20">
+        <Card className="border-amber-200 bg-white">
           <CardContent className="p-4 text-center">
-            <Calendar className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-yellow-400">{mediumAlerts.length}</div>
-            <div className="text-sm text-slate-400">Média Prioridade</div>
+            <Calendar className="h-8 w-8 text-amber-600 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-amber-600">{mediumAlerts.length}</div>
+            <div className="text-sm text-gray-600">Média Prioridade</div>
           </CardContent>
         </Card>
         
-        <Card className="futuristic-card border-blue-500/20">
+        <Card className="border-blue-200 bg-white">
           <CardContent className="p-4 text-center">
-            <Calendar className="h-8 w-8 text-blue-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-blue-400">{lowAlerts.length}</div>
-            <div className="text-sm text-slate-400">Baixa Prioridade</div>
+            <Calendar className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-blue-600">{lowAlerts.length}</div>
+            <div className="text-sm text-gray-600">Baixa Prioridade</div>
           </CardContent>
         </Card>
       </div>
@@ -182,30 +196,31 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
       {alerts.length > 0 ? (
         <div className="space-y-4">
           {alerts.map((alert) => (
-            <Card key={alert.id} className={`${alert.colorClass} border-l-4 futuristic-card`}>
+            <Card key={alert.id} className={`${alert.colorClass} border-l-4 bg-white shadow-sm`}>
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
-                  <div className="flex items-start space-x-3">
+                  <div className="flex items-start space-x-3 flex-1">
                     {getPriorityIcon(alert.priority)}
                     <div className="flex-1">
-                      <h3 className="font-semibold text-slate-200">{alert.vaccine_name}</h3>
-                      <p className="text-slate-300">{alert.client_name}</p>
-                      <p className="text-sm text-slate-400">{alert.client_whatsapp}</p>
+                      <h3 className="font-semibold text-gray-800">{alert.vaccine_name}</h3>
+                      <p className="text-gray-700">{alert.client_name}</p>
+                      <p className="text-sm text-gray-600">{alert.client_whatsapp}</p>
                       <div className="mt-2 text-sm">
-                        <p className="text-slate-300"><strong>Aplicação:</strong> {new Date(alert.vaccination_date).toLocaleDateString('pt-BR')}</p>
-                        <p className="text-slate-300"><strong>Vencimento:</strong> {new Date(alert.expiry_date).toLocaleDateString('pt-BR')}</p>
-                        <p className="font-medium text-slate-200">{alert.status}</p>
+                        <p className="text-gray-700"><strong>Aplicação:</strong> {new Date(alert.vaccination_date).toLocaleDateString('pt-BR')}</p>
+                        <p className="text-gray-700"><strong>Vencimento:</strong> {new Date(alert.expiry_date).toLocaleDateString('pt-BR')}</p>
+                        <p className="font-medium text-gray-800">{alert.status}</p>
                         {alert.notes && (
-                          <p className="mt-1 text-slate-400"><strong>Obs:</strong> {alert.notes}</p>
+                          <p className="mt-1 text-gray-600"><strong>Obs:</strong> {alert.notes}</p>
                         )}
                       </div>
                     </div>
                   </div>
                   
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex flex-col space-y-2 ml-4">
                     <Button
                       onClick={() => handleWhatsAppContact(alert.client_whatsapp, alert.client_name, alert.vaccine_name, alert.status)}
-                      className="futuristic-button flex items-center space-x-2"
+                      className="bg-green-600 hover:bg-green-700 text-white flex items-center space-x-2 text-sm px-3 py-2"
+                      size="sm"
                     >
                       <Phone className="h-4 w-4" />
                       <span>WhatsApp</span>
@@ -213,10 +228,21 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
                     
                     <Button
                       onClick={() => handleWebhookNotification(alert)}
-                      className="futuristic-button bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 flex items-center space-x-2"
+                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center space-x-2 text-sm px-3 py-2"
+                      size="sm"
                     >
                       <Send className="h-4 w-4" />
                       <span>Notificar</span>
+                    </Button>
+
+                    <Button
+                      onClick={() => handleDeleteVaccine(alert.id, alert.vaccine_name)}
+                      disabled={deletingVaccine === alert.id}
+                      className="bg-red-600 hover:bg-red-700 text-white flex items-center space-x-2 text-sm px-3 py-2"
+                      size="sm"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span>{deletingVaccine === alert.id ? 'Excluindo...' : 'Excluir'}</span>
                     </Button>
                   </div>
                 </div>
@@ -225,11 +251,11 @@ const AlertsPage = ({ vaccines }: AlertsPageProps) => {
           ))}
         </div>
       ) : (
-        <Card className="futuristic-card">
+        <Card className="bg-white border-gray-200">
           <CardContent className="p-8 text-center">
-            <Calendar className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-            <p className="text-slate-400 text-lg">Nenhum alerta no momento</p>
-            <p className="text-slate-500 text-sm">Todas as vacinas estão em dia!</p>
+            <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600 text-lg">Nenhum alerta no momento</p>
+            <p className="text-gray-500 text-sm">Todas as vacinas estão em dia!</p>
           </CardContent>
         </Card>
       )}

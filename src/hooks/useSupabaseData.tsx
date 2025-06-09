@@ -133,6 +133,33 @@ export const useSupabaseData = () => {
     }
   };
 
+  const deleteVaccine = async (vaccineId: string) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('vaccines')
+        .delete()
+        .eq('id', vaccineId)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      await fetchVaccines();
+      toast({
+        title: "Sucesso!",
+        description: "Vacina excluída com sucesso",
+      });
+    } catch (error) {
+      console.error('Error deleting vaccine:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao excluir vacina",
+        variant: "destructive",
+      });
+    }
+  };
+
   useEffect(() => {
     if (user) {
       Promise.all([fetchClients(), fetchVaccines()]).finally(() => {
@@ -147,6 +174,7 @@ export const useSupabaseData = () => {
     loading,
     addClient,
     addVaccine,
+    deleteVaccine,
     refetch: () => Promise.all([fetchClients(), fetchVaccines()])
   };
 };
