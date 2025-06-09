@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Calendar, AlertTriangle, CheckCircle } from 'lucide-react';
 
@@ -23,9 +22,10 @@ interface Vaccine {
 interface DashboardProps {
   clients: Client[];
   vaccines: Vaccine[];
+  onDeleteVaccine: (vaccineId: string) => Promise<void>;
 }
 
-const Dashboard = ({ clients, vaccines }: DashboardProps) => {
+const Dashboard = ({ clients, vaccines, onDeleteVaccine }: DashboardProps) => {
   const today = new Date();
   const upcomingVaccines = vaccines.filter(vaccine => {
     const expiryDate = new Date(vaccine.expiry_date);

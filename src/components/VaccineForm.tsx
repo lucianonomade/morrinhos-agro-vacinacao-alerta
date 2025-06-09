@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -35,9 +34,10 @@ interface VaccineFormProps {
   clients: Client[];
   vaccines: Vaccine[];
   onAddVaccine: (vaccine: Omit<Vaccine, 'id'>) => void;
+  onDeleteVaccine: (vaccineId: string) => Promise<void>;
 }
 
-const VaccineForm = ({ clients, vaccines, onAddVaccine }: VaccineFormProps) => {
+const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: VaccineFormProps) => {
   const [selectedClientId, setSelectedClientId] = useState('');
   const [vaccineName, setVaccineName] = useState('');
   const [vaccinationDate, setVaccinationDate] = useState<Date>();
