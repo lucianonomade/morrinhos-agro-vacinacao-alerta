@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,7 @@ interface Vaccine {
   client_name: string;
   client_whatsapp: string;
   vaccine_name: string;
+  dose_description?: string;
   vaccination_date: string;
   expiry_date: string;
   notes?: string;
@@ -40,6 +42,7 @@ interface VaccineFormProps {
 const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: VaccineFormProps) => {
   const [selectedClientId, setSelectedClientId] = useState('');
   const [vaccineName, setVaccineName] = useState('');
+  const [doseDescription, setDoseDescription] = useState('');
   const [vaccinationDate, setVaccinationDate] = useState<Date>();
   const [expiryDate, setExpiryDate] = useState<Date>();
   const [notes, setNotes] = useState('');
@@ -52,6 +55,7 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: Vacci
       client_name: vaccineData.client_name,
       client_whatsapp: vaccineData.client_whatsapp,
       vaccine_name: vaccineData.vaccine_name,
+      dose_description: vaccineData.dose_description || '',
       vaccination_date: vaccineData.vaccination_date,
       expiry_date: vaccineData.expiry_date,
       notes: vaccineData.notes || '',
@@ -102,6 +106,7 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: Vacci
       client_name: selectedClient.name,
       client_whatsapp: selectedClient.whatsapp,
       vaccine_name: vaccineName.trim(),
+      dose_description: doseDescription.trim(),
       vaccination_date: vaccinationDate.toISOString().split('T')[0],
       expiry_date: expiryDate.toISOString().split('T')[0],
       notes: notes.trim(),
@@ -113,39 +118,30 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: Vacci
     onAddVaccine(newVaccine);
     setSelectedClientId('');
     setVaccineName('');
+    setDoseDescription('');
     setVaccinationDate(undefined);
     setExpiryDate(undefined);
     setNotes('');
   };
 
-  const getVaccineStatus = (vaccine: Vaccine) => {
-    const today = new Date();
-    const expiryDate = new Date(vaccine.expiry_date);
-    const daysDiff = (expiryDate.getTime() - today.getTime()) / (1000 * 3600 * 24);
-
-    if (daysDiff < 0) return { status: 'expired', color: 'bg-red-50 border-red-200 text-red-800' };
-    if (daysDiff <= 7) return { status: 'warning', color: 'bg-yellow-50 border-yellow-200 text-yellow-800' };
-    return { status: 'valid', color: 'bg-green-50 border-green-200 text-green-800' };
-  };
-
   return (
-    <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-green-700 mb-6">Calendário de Vacinas</h2>
+    <div className="space-y-4 sm:space-y-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-green-700 mb-4 sm:mb-6">Calendário de Vacinas</h2>
       
       <Card className="agro-card">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2 text-green-700">
-            <Plus className="h-5 w-5" />
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center space-x-2 text-green-700 text-lg sm:text-xl">
+            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
             <span>Cadastrar Nova Vacina</span>
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-0">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="client" className="text-gray-700">Cliente *</Label>
+                <Label htmlFor="client" className="text-gray-700 text-sm font-medium">Cliente *</Label>
                 <Select value={selectedClientId} onValueChange={setSelectedClientId}>
-                  <SelectTrigger className="agro-input">
+                  <SelectTrigger className="agro-input h-10 sm:h-11">
                     <SelectValue placeholder="Selecione um cliente" />
                   </SelectTrigger>
                   <SelectContent>
@@ -159,27 +155,39 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: Vacci
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="vaccineName" className="text-gray-700">Nome da Vacina/Medicamento *</Label>
+                <Label htmlFor="vaccineName" className="text-gray-700 text-sm font-medium">Nome da Vacina/Medicamento *</Label>
                 <Input
                   id="vaccineName"
                   type="text"
                   value={vaccineName}
                   onChange={(e) => setVaccineName(e.target.value)}
                   placeholder="Ex: Aftosa, Vermífugo, etc."
-                  className="agro-input"
+                  className="agro-input h-10 sm:h-11"
                 />
               </div>
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="doseDescription" className="text-gray-700 text-sm font-medium">Dose/Descrição</Label>
+              <Input
+                id="doseDescription"
+                type="text"
+                value={doseDescription}
+                onChange={(e) => setDoseDescription(e.target.value)}
+                placeholder="Ex: 1ª dose, 2ª dose, dose de reforço, etc."
+                className="agro-input h-10 sm:h-11"
+              />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-gray-700">Data da Vacinação *</Label>
+                <Label className="text-gray-700 text-sm font-medium">Data da Vacinação *</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left font-normal agro-input",
+                        "w-full justify-start text-left font-normal agro-input h-10 sm:h-11",
                         !vaccinationDate && "text-muted-foreground"
                       )}
                     >
@@ -200,13 +208,13 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: Vacci
               </div>
 
               <div className="space-y-2">
-                <Label className="text-gray-700">Data de Vencimento *</Label>
+                <Label className="text-gray-700 text-sm font-medium">Data de Vencimento *</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left font-normal agro-input",
+                        "w-full justify-start text-left font-normal agro-input h-10 sm:h-11",
                         !expiryDate && "text-muted-foreground"
                       )}
                     >
@@ -228,18 +236,18 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: Vacci
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="notes" className="text-gray-700">Observações</Label>
+              <Label htmlFor="notes" className="text-gray-700 text-sm font-medium">Observações</Label>
               <Input
                 id="notes"
                 type="text"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Observações adicionais (opcional)"
-                className="agro-input"
+                className="agro-input h-10 sm:h-11"
               />
             </div>
             
-            <Button type="submit" className="w-full agro-button">
+            <Button type="submit" className="w-full agro-button h-10 sm:h-11">
               <Plus className="h-4 w-4 mr-2" />
               Cadastrar Vacina
             </Button>
@@ -248,32 +256,35 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: Vacci
       </Card>
 
       <Card className="agro-card">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2 text-green-700">
-            <Syringe className="h-5 w-5" />
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center space-x-2 text-green-700 text-lg sm:text-xl">
+            <Syringe className="h-4 w-4 sm:h-5 sm:w-5" />
             <span>Vacinas Cadastradas ({vaccines.length})</span>
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-0">
           {vaccines.length > 0 ? (
             <div className="space-y-3">
               {vaccines.map((vaccine) => {
                 return (
-                  <div key={vaccine.id} className="p-4 rounded-lg border border-green-200 bg-green-50/50 backdrop-blur-sm">
+                  <div key={vaccine.id} className="p-3 sm:p-4 rounded-lg border border-green-200 bg-green-50/50 backdrop-blur-sm">
                     <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="font-medium text-gray-900">{vaccine.vaccine_name}</h3>
-                        <p className="text-sm text-gray-600">{vaccine.client_name}</p>
-                        <p className="text-sm text-gray-600">{vaccine.client_whatsapp}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-gray-900 text-sm sm:text-base">{vaccine.vaccine_name}</h3>
+                        {vaccine.dose_description && (
+                          <p className="text-xs sm:text-sm text-blue-600 font-medium">{vaccine.dose_description}</p>
+                        )}
+                        <p className="text-xs sm:text-sm text-gray-600">{vaccine.client_name}</p>
+                        <p className="text-xs sm:text-sm text-gray-600">{vaccine.client_whatsapp}</p>
                         {vaccine.notes && (
-                          <p className="text-sm text-gray-700 mt-1">{vaccine.notes}</p>
+                          <p className="text-xs sm:text-sm text-gray-700 mt-1">{vaccine.notes}</p>
                         )}
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900">
+                      <div className="text-right ml-2 flex-shrink-0">
+                        <p className="text-xs sm:text-sm font-medium text-gray-900">
                           Aplicação: {new Date(vaccine.vaccination_date).toLocaleDateString('pt-BR')}
                         </p>
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-xs sm:text-sm font-medium text-gray-900">
                           Vencimento: {new Date(vaccine.expiry_date).toLocaleDateString('pt-BR')}
                         </p>
                       </div>
@@ -283,7 +294,7 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: Vacci
               })}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">Nenhuma vacina cadastrada ainda</p>
+            <p className="text-gray-500 text-center py-8 text-sm sm:text-base">Nenhuma vacina cadastrada ainda</p>
           )}
         </CardContent>
       </Card>

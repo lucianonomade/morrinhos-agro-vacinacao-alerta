@@ -12,10 +12,14 @@ import { Loader2 } from 'lucide-react';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
-  const { clients, vaccines, loading, addClient, addVaccine, deleteVaccine } = useSupabaseData();
+  const { clients, vaccines, loading, addClient, deleteClient, addVaccine, deleteVaccine } = useSupabaseData();
 
   const handleAddClient = async (client: { name: string; whatsapp: string }) => {
     await addClient(client);
+  };
+
+  const handleDeleteClient = async (clientId: string) => {
+    await deleteClient(clientId);
   };
 
   const handleAddVaccine = async (vaccine: any) => {
@@ -42,7 +46,7 @@ const Index = () => {
       case 'dashboard':
         return <Dashboard clients={clients} vaccines={vaccines} onDeleteVaccine={handleDeleteVaccine} />;
       case 'clients':
-        return <ClientForm clients={clients} onAddClient={handleAddClient} />;
+        return <ClientForm clients={clients} onAddClient={handleAddClient} onDeleteClient={handleDeleteClient} />;
       case 'vaccines':
         return <VaccineForm clients={clients} vaccines={vaccines} onAddVaccine={handleAddVaccine} onDeleteVaccine={handleDeleteVaccine} />;
       case 'alerts':

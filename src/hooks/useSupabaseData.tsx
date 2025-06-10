@@ -17,6 +17,7 @@ interface Vaccine {
   client_name: string;
   client_whatsapp: string;
   vaccine_name: string;
+  dose_description?: string;
   vaccination_date: string;
   expiry_date: string;
   notes?: string;
@@ -99,6 +100,51 @@ export const useSupabaseData = () => {
     }
   };
 
+  const deleteClient = async (clientId: string) => {
+    if (!user) return;
+
+    try {
+      // Primeiro, verificar se há vacinas associadas ao cliente
+      const { data: vaccinesData, error: vaccinesError } = await supabase
+        .from('vaccines')
+        .select('id')
+        .eq('client_id', clientId)
+        .eq('user_id', user.id);
+
+      if (vaccinesError) throw vaccinesError;
+
+      if (vaccinesData && vaccinesData.length > 0) {
+        toast({
+          title: "Erro",
+          description: "Não é possível excluir cliente com vacinas cadastradas. Exclua as vacinas primeiro.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('clients')
+        .delete()
+        .eq('id', clientId)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      await fetchClients();
+      toast({
+        title: "Sucesso!",
+        description: "Cliente excluído com sucesso",
+      });
+    } catch (error) {
+      console.error('Error deleting client:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao excluir cliente",
+        variant: "destructive",
+      });
+    }
+  };
+
   const addVaccine = async (vaccine: Omit<Vaccine, 'id'>) => {
     if (!user) return;
 
@@ -111,6 +157,7 @@ export const useSupabaseData = () => {
           client_name: vaccine.client_name,
           client_whatsapp: vaccine.client_whatsapp,
           vaccine_name: vaccine.vaccine_name,
+          dose_description: vaccine.dose_description,
           vaccination_date: vaccine.vaccination_date,
           expiry_date: vaccine.expiry_date,
           notes: vaccine.notes
@@ -173,6 +220,7 @@ export const useSupabaseData = () => {
     vaccines,
     loading,
     addClient,
+    deleteClient,
     addVaccine,
     deleteVaccine,
     refetch: () => Promise.all([fetchClients(), fetchVaccines()])
