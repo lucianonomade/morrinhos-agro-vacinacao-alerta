@@ -86,6 +86,16 @@ const AlertsPage = ({ vaccines, onDeleteVaccine }: AlertsPageProps) => {
   };
 
   const handleWebhookNotification = async (alert: any) => {
+    // Webhook só dispara para vacinas que vencem em 1 dia ou já venceram
+    if (alert.daysDiff > 1) {
+      toast({
+        title: "Webhook não enviado",
+        description: "O webhook só é enviado para vacinas que vencem em 1 dia ou já venceram",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const webhookUrl = 'https://webhook.ls.app.br/webhook/793419b2-4251-47c3-985f-056019f63bde';
     
     const payload = {
@@ -228,8 +238,10 @@ const AlertsPage = ({ vaccines, onDeleteVaccine }: AlertsPageProps) => {
                     
                     <Button
                       onClick={() => handleWebhookNotification(alert)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center space-x-2 text-sm px-3 py-2"
+                      disabled={alert.daysDiff > 1}
+                      className={`${alert.daysDiff > 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'} text-white flex items-center space-x-2 text-sm px-3 py-2`}
                       size="sm"
+                      title={alert.daysDiff > 1 ? 'Webhook só dispara 1 dia antes do vencimento' : 'Enviar notificação webhook'}
                     >
                       <Send className="h-4 w-4" />
                       <span>Notificar</span>
