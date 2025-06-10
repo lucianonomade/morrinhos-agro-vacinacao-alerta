@@ -66,6 +66,7 @@ export type Database = {
           client_name: string
           client_whatsapp: string
           created_at: string | null
+          dose_description: string | null
           expiry_date: string
           id: string
           notes: string | null
@@ -79,6 +80,7 @@ export type Database = {
           client_name: string
           client_whatsapp: string
           created_at?: string | null
+          dose_description?: string | null
           expiry_date: string
           id?: string
           notes?: string | null
@@ -92,6 +94,7 @@ export type Database = {
           client_name?: string
           client_whatsapp?: string
           created_at?: string | null
+          dose_description?: string | null
           expiry_date?: string
           id?: string
           notes?: string | null
