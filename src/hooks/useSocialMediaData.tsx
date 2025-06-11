@@ -67,13 +67,20 @@ export const useSocialMediaData = () => {
   };
 
   const fetchContent = async () => {
-    if (!user) return;
+    if (!user || !userProfile) return;
 
     try {
-      const { data, error } = await supabase
-        .from('social_media_content')
-        .select('*')
-        .order('created_at', { ascending: false });
+      let query = supabase.from('social_media_content').select('*');
+
+      // Se for social media, mostrar apenas seu conteúdo
+      // Se for lojista, mostrar apenas conteúdo enviado para ele
+      if (userProfile.user_type === 'social_media') {
+        query = query.eq('user_id', user.id);
+      } else if (userProfile.user_type === 'lojista') {
+        query = query.eq('lojista_id', user.id);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
       setContent(data || []);
@@ -206,13 +213,35 @@ export const useSocialMediaData = () => {
     }
   };
 
+  // Buscar estatísticas do usuário
+  const getContentStats = () => {
+    const userContent = userProfile?.user_type === 'social_media' 
+      ? content.filter(item => item.user_id === user?.id)
+      : content;
+
+    return {
+      total: userContent.length,
+      pending: userContent.filter(item => item.status === 'pending').length,
+      approved: userContent.filter(item => item.status === 'approved').length,
+      rejected: userContent.filter(item => item.status === 'rejected').length,
+    };
+  };
+
   useEffect(() => {
     if (user) {
-      Promise.all([fetchUserProfile(), fetchLojistas(), fetchContent()]).finally(() => {
-        setLoading(false);
+      fetchUserProfile().then(() => {
+        Promise.all([fetchLojistas(), fetchContent()]).finally(() => {
+          setLoading(false);
+        });
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    if (userProfile) {
+      fetchContent();
+    }
+  }, [userProfile]);
 
   return {
     content,
@@ -222,6 +251,7 @@ export const useSocialMediaData = () => {
     addContent,
     updateContentStatus,
     deleteContent,
+    getContentStats,
     refetch: () => Promise.all([fetchContent()])
   };
 };

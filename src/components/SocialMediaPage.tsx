@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Upload, FileImage } from 'lucide-react';
+import { Users, Upload, FileImage, BarChart } from 'lucide-react';
 import SocialMediaUpload from './SocialMediaUpload';
 import SocialMediaContent from './SocialMediaContent';
+import SocialMediaDashboard from './SocialMediaDashboard';
 import { useSocialMediaData } from '@/hooks/useSocialMediaData';
 
 const SocialMediaPage = () => {
@@ -31,50 +32,27 @@ const SocialMediaPage = () => {
         </div>
       </div>
 
-      {/* Cards de estatísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Conteúdo</CardTitle>
-            <FileImage className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{content.length}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pendentes</CardTitle>
-            <Upload className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {content.filter(item => item.status === 'pending').length}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Aprovados</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {content.filter(item => item.status === 'approved').length}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="content" className="space-y-4">
+      <Tabs defaultValue="dashboard" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="content">Conteúdo</TabsTrigger>
+          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+            <BarChart className="h-4 w-4" />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="content" className="flex items-center gap-2">
+            <FileImage className="h-4 w-4" />
+            Conteúdo
+          </TabsTrigger>
           {userProfile?.user_type === 'social_media' && (
-            <TabsTrigger value="upload">Upload</TabsTrigger>
+            <TabsTrigger value="upload" className="flex items-center gap-2">
+              <Upload className="h-4 w-4" />
+              Upload
+            </TabsTrigger>
           )}
         </TabsList>
+
+        <TabsContent value="dashboard">
+          <SocialMediaDashboard />
+        </TabsContent>
 
         <TabsContent value="content">
           <SocialMediaContent />
