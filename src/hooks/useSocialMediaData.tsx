@@ -10,11 +10,11 @@ interface SocialMediaContent {
   lojista_id: string;
   title: string;
   description?: string;
-  content_type: string; // Changed from 'image' | 'video' to string
+  content_type: 'image' | 'video';
   file_url: string;
   file_name: string;
   file_size?: number;
-  status: string; // Changed from 'pending' | 'approved' | 'rejected' to string
+  status: 'pending' | 'approved' | 'rejected';
   created_at: string;
   updated_at: string;
 }
