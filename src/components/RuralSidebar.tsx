@@ -1,105 +1,240 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, 
   Users, 
   Calendar, 
   Bell, 
-  Share2,
-  LogOut 
+  Settings,
+  Menu,
+  X,
+  ChevronRight
 } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
 
-interface RuralSidebarProps {
+interface SidebarProps {
   currentPage: string;
   onPageChange: (page: string) => void;
 }
 
-const RuralSidebar = ({ currentPage, onPageChange }: RuralSidebarProps) => {
-  const { signOut } = useAuth();
+const RuralSidebar = ({ currentPage, onPageChange }: SidebarProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: Home },
+    { id: 'dashboard', label: 'Início', icon: Home },
     { id: 'clients', label: 'Clientes', icon: Users },
     { id: 'vaccines', label: 'Vacinas', icon: Calendar },
     { id: 'alerts', label: 'Alertas', icon: Bell },
-    { id: 'socialmedia', label: 'Social Media', icon: Share2 },
+    { id: 'settings', label: 'Configurações', icon: Settings },
   ];
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
+  const sidebarVariants = {
+    expanded: { width: 280 },
+    collapsed: { width: 80 }
+  };
+
+  const mobileOverlayVariants = {
+    open: { opacity: 1, visibility: 'visible' as const },
+    closed: { opacity: 0, visibility: 'hidden' as const }
+  };
+
+  const mobileSidebarVariants = {
+    open: { x: 0, scale: 1 },
+    closed: { x: -320, scale: 0.9 }
   };
 
   return (
-    <div className="hidden md:block fixed left-0 top-0 z-40 w-20 h-full bg-white/95 backdrop-blur-md border-r border-green-200 shadow-lg">
-      <div className="flex flex-col h-full">
-        {/* Logo/Brand */}
-        <div className="flex items-center justify-center h-16 border-b border-green-200">
-          <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl flex items-center justify-center">
-            <Calendar className="h-6 w-6 text-white" />
+    <>
+      {/* Mobile Trigger Button */}
+      <Button
+        onClick={() => setIsMobileOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-50 bg-green-600 border border-green-500 text-white hover:bg-green-700"
+        size="icon"
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
+
+      {/* Mobile Overlay */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={mobileOverlayVariants}
+            className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+            onClick={() => setIsMobileOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Sidebar */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={mobileSidebarVariants}
+            className="md:hidden fixed left-0 top-0 h-full w-80 z-50"
+          >
+            <div className="h-full bg-white border-r border-green-200 shadow-xl subtle-texture">
+              {/* Mobile Header */}
+              <div className="p-6 border-b border-green-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <img 
+                      src="/lovable-uploads/1a35f86c-f516-4b6c-9ee1-b3e42e26f758.png" 
+                      alt="Morrinhos" 
+                      className="h-10 w-10 object-contain"
+                    />
+                    <div>
+                      <h1 className="text-xl font-bold text-green-700">
+                        Morrinhos
+                      </h1>
+                      <p className="text-sm text-green-600">Agropecuária</p>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => setIsMobileOpen(false)}
+                    variant="ghost"
+                    size="icon"
+                    className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Mobile Menu Items */}
+              <nav className="p-4 space-y-2">
+                {menuItems.map((item, index) => {
+                  const IconComponent = item.icon;
+                  const isActive = currentPage === item.id;
+
+                  return (
+                    <motion.button
+                      key={item.id}
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ 
+                        opacity: 1, 
+                        x: 0,
+                        transition: { delay: index * 0.1 }
+                      }}
+                      onClick={() => {
+                        onPageChange(item.id);
+                        setIsMobileOpen(false);
+                      }}
+                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                        isActive
+                          ? 'bg-green-600 text-white shadow-md'
+                          : 'text-green-700 hover:bg-green-50 hover:text-green-800'
+                      }`}
+                    >
+                      <IconComponent className="h-5 w-5" />
+                      <span className="font-medium">{item.label}</span>
+                    </motion.button>
+                  );
+                })}
+              </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Sidebar */}
+      <motion.div
+        initial="collapsed"
+        animate={isExpanded ? "expanded" : "collapsed"}
+        variants={sidebarVariants}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
+        className="hidden md:block fixed left-0 top-0 h-full z-30 bg-white border-r border-green-200 shadow-xl subtle-texture"
+      >
+        {/* Header */}
+        <div className="p-6 border-b border-green-200">
+          <div className="flex items-center space-x-3">
+            <img 
+              src="/lovable-uploads/1a35f86c-f516-4b6c-9ee1-b3e42e26f758.png" 
+              alt="Morrinhos" 
+              className="h-10 w-10 object-contain"
+            />
+            <AnimatePresence>
+              {isExpanded && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <h1 className="text-xl font-bold text-green-700">
+                    Morrinhos
+                  </h1>
+                  <p className="text-sm text-green-600">Agropecuária</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-4 space-y-2">
-          {menuItems.map((item) => {
+        <nav className="p-4 space-y-2">
+          {menuItems.map((item, index) => {
             const IconComponent = item.icon;
             const isActive = currentPage === item.id;
 
             return (
               <motion.button
                 key={item.id}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ 
+                  opacity: 1, 
+                  x: 0,
+                  transition: { delay: index * 0.1 }
+                }}
                 onClick={() => onPageChange(item.id)}
-                className={`w-full px-3 py-3 mx-2 rounded-xl transition-all duration-300 group relative ${
+                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActive
-                    ? 'bg-green-600 text-white shadow-lg'
-                    : 'text-green-600 hover:bg-green-50 hover:text-green-700'
+                    ? 'bg-green-600 text-white shadow-md'
+                    : 'text-green-700 hover:bg-green-50 hover:text-green-800'
                 }`}
-                title={item.label}
               >
-                <div className="flex flex-col items-center">
-                  <IconComponent className="h-6 w-6 mb-1" />
-                  <span className="text-xs font-medium">{item.label}</span>
-                </div>
+                <IconComponent className="h-5 w-5" />
+                
+                <AnimatePresence>
+                  {isExpanded && (
+                    <motion.span
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.3 }}
+                      className="font-medium"
+                    >
+                      {item.label}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
 
-                {/* Tooltip */}
-                <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-50">
-                  {item.label}
-                </div>
+                <AnimatePresence>
+                  {isExpanded && !isActive && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0 }}
+                      className="ml-auto"
+                    >
+                      <ChevronRight className="h-4 w-4 text-green-400" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.button>
             );
           })}
         </nav>
-
-        {/* Sign Out Button */}
-        <div className="p-2 border-t border-green-200">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleSignOut}
-            className="w-full px-3 py-3 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-300 group relative"
-            title="Sair"
-          >
-            <div className="flex flex-col items-center">
-              <LogOut className="h-6 w-6 mb-1" />
-              <span className="text-xs font-medium">Sair</span>
-            </div>
-
-            {/* Tooltip */}
-            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-50">
-              Sair
-            </div>
-          </motion.button>
-        </div>
-      </div>
-    </div>
+      </motion.div>
+    </>
   );
 };
 

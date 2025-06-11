@@ -43,7 +43,6 @@ export type Database = {
           full_name: string | null
           id: string
           updated_at: string | null
-          user_type: Database["public"]["Enums"]["user_type"] | null
         }
         Insert: {
           created_at?: string | null
@@ -51,7 +50,6 @@ export type Database = {
           full_name?: string | null
           id: string
           updated_at?: string | null
-          user_type?: Database["public"]["Enums"]["user_type"] | null
         }
         Update: {
           created_at?: string | null
@@ -59,52 +57,6 @@ export type Database = {
           full_name?: string | null
           id?: string
           updated_at?: string | null
-          user_type?: Database["public"]["Enums"]["user_type"] | null
-        }
-        Relationships: []
-      }
-      social_media_content: {
-        Row: {
-          content_type: string
-          created_at: string
-          description: string | null
-          file_name: string
-          file_size: number | null
-          file_url: string
-          id: string
-          lojista_id: string
-          status: string | null
-          title: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          content_type: string
-          created_at?: string
-          description?: string | null
-          file_name: string
-          file_size?: number | null
-          file_url: string
-          id?: string
-          lojista_id: string
-          status?: string | null
-          title: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          content_type?: string
-          created_at?: string
-          description?: string | null
-          file_name?: string
-          file_size?: number | null
-          file_url?: string
-          id?: string
-          lojista_id?: string
-          status?: string | null
-          title?: string
-          updated_at?: string
-          user_id?: string
         }
         Relationships: []
       }
@@ -114,7 +66,6 @@ export type Database = {
           client_name: string
           client_whatsapp: string
           created_at: string | null
-          dose_description: string | null
           expiry_date: string
           id: string
           notes: string | null
@@ -128,7 +79,6 @@ export type Database = {
           client_name: string
           client_whatsapp: string
           created_at?: string | null
-          dose_description?: string | null
           expiry_date: string
           id?: string
           notes?: string | null
@@ -142,7 +92,6 @@ export type Database = {
           client_name?: string
           client_whatsapp?: string
           created_at?: string | null
-          dose_description?: string | null
           expiry_date?: string
           id?: string
           notes?: string | null
@@ -169,7 +118,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      user_type: "lojista" | "social_media"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -284,8 +233,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      user_type: ["lojista", "social_media"],
-    },
+    Enums: {},
   },
 } as const

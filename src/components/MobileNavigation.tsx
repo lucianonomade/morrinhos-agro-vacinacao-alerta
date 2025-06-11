@@ -6,7 +6,7 @@ import {
   Users, 
   Calendar, 
   Bell, 
-  Share2
+  Settings
 } from 'lucide-react';
 
 interface MobileNavigationProps {
@@ -20,7 +20,7 @@ const MobileNavigation = ({ currentPage, onPageChange }: MobileNavigationProps) 
     { id: 'clients', label: 'Clientes', icon: Users },
     { id: 'vaccines', label: 'Vacinas', icon: Calendar },
     { id: 'alerts', label: 'Alertas', icon: Bell },
-    { id: 'socialmedia', label: 'Social', icon: Share2 },
+    { id: 'settings', label: 'Config', icon: Settings },
   ];
 
   return (

@@ -106,10 +106,10 @@ const VaccineForm = ({ clients, vaccines, onAddVaccine, onDeleteVaccine }: Vacci
       client_name: selectedClient.name,
       client_whatsapp: selectedClient.whatsapp,
       vaccine_name: vaccineName.trim(),
-      dose_description: doseDescription.trim() || undefined,
+      dose_description: doseDescription.trim(),
       vaccination_date: vaccinationDate.toISOString().split('T')[0],
       expiry_date: expiryDate.toISOString().split('T')[0],
-      notes: notes.trim() || undefined,
+      notes: notes.trim(),
     };
 
     // Enviar webhook antes de adicionar a vacina
