@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LogIn, UserPlus, Loader2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -16,7 +15,6 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [userType, setUserType] = useState<'lojista' | 'social_media'>('lojista');
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
@@ -56,7 +54,7 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await signUp(email, password, fullName, userType);
+      const { error } = await signUp(email, password, fullName);
       
       if (error) {
         if (error.message.includes('User already registered')) {
@@ -193,19 +191,6 @@ const Auth = () => {
                       minLength={6}
                       required
                     />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="userType" className="text-gray-700">Tipo de Usuário</Label>
-                    <Select value={userType} onValueChange={(value: 'lojista' | 'social_media') => setUserType(value)}>
-                      <SelectTrigger className="border-gray-300 focus:border-green-500 focus:ring-green-500">
-                        <SelectValue placeholder="Selecione o tipo de usuário" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="lojista">Lojista</SelectItem>
-                        <SelectItem value="social_media">Social Media</SelectItem>
-                      </SelectContent>
-                    </Select>
                   </div>
                   
                   <Button 
