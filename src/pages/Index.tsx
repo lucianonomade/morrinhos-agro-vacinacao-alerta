@@ -7,6 +7,7 @@ import Dashboard from '@/components/Dashboard';
 import ClientForm from '@/components/ClientForm';
 import VaccineForm from '@/components/VaccineForm';
 import AlertsPage from '@/components/AlertsPage';
+import SocialMediaPage from '@/components/SocialMediaPage';
 import { useSupabaseData } from '@/hooks/useSupabaseData';
 import { Loader2 } from 'lucide-react';
 
@@ -31,7 +32,7 @@ const Index = () => {
   };
 
   const renderCurrentPage = () => {
-    if (loading) {
+    if (loading && currentPage !== 'socialmedia') {
       return (
         <div className="flex items-center justify-center py-8 md:py-12">
           <div className="text-center">
@@ -51,6 +52,8 @@ const Index = () => {
         return <VaccineForm clients={clients} vaccines={vaccines} onAddVaccine={handleAddVaccine} onDeleteVaccine={handleDeleteVaccine} />;
       case 'alerts':
         return <AlertsPage vaccines={vaccines} onDeleteVaccine={handleDeleteVaccine} />;
+      case 'socialmedia':
+        return <SocialMediaPage />;
       default:
         return <Dashboard clients={clients} vaccines={vaccines} onDeleteVaccine={handleDeleteVaccine} />;
     }
